@@ -1,0 +1,53 @@
+#include <stdio.h>
+int main()
+{
+    int num_processes = 4;
+    int arrival_times[] = {0, 1, 2, 4};
+    int burst_times[] = {5, 3, 3, 1};
+    int remaining_burst_times[num_processes];
+    int waiting_times[num_processes];
+    int turnaround_times[num_processes];
+    int total_waiting_time = 0;
+    int total_turnaround_time = 0;
+    int current_time = 0;
+    int i, j;
+    for (i = 0; i < num_processes; i++)
+    {
+    remaining_burst_times[i] = burst_times[i];
+    }
+    while (1) 
+    {
+    int shortest_time = -1;
+    int shortest_process = -1;
+    for (i = 0; i < num_processes; i++) 
+    {
+    if (arrival_times[i] <= current_time && remaining_burst_times[i] > 0) 
+    {
+    if (shortest_time == -1 || remaining_burst_times[i] < shortest_time) 
+    {
+    shortest_time = remaining_burst_times[i];
+    shortest_process = i;
+    }
+    }
+    }
+    if (shortest_process == -1)
+    {
+    break;
+    }
+    remaining_burst_times[shortest_process]--;
+    if (remaining_burst_times[shortest_process] == 0) 
+    {
+    int completion_time = current_time + 1;
+    waiting_times[shortest_process] = completion_time - arrival_times[shortest_process] - burst_times[shortest_process];
+    turnaround_times[shortest_process] = completion_time - arrival_times[shortest_process];
+    total_waiting_time += waiting_times[shortest_process];
+    total_turnaround_time += turnaround_times[shortest_process];
+    }
+    current_time++;
+    }
+    float avg_waiting_time = (float) total_waiting_time / num_processes;
+    float avg_turnaround_time = (float) total_turnaround_time / num_processes;
+    printf("Average waiting time: %.2f ms\n", avg_waiting_time);
+    printf("Average turnaround time: %.2f ms\n", avg_turnaround_time);
+    return 0;
+}
