@@ -1,0 +1,80 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define P 3
+#define R 3
+void isDeadlock(int available[], int max[][R], int alloc[][R])
+{
+    int i, j, k;
+    int finish[P] = { 0 };
+    int need[P][R];
+    for (i = 0; i < P; i++)
+    {
+    for (j = 0; j < R; j++) 
+    {
+    need[i][j] = max[i][j] - alloc[i][j];
+    }
+    }
+    int safe = 0;
+    for (k = 0; k < P; k++) 
+    {
+    for (i = 0; i < P; i++) 
+    {
+    if (!finish[i]) 
+    {
+    int canBeExecuted = 1;
+    for (j = 0; j < R; j++) 
+    {
+    if (need[i][j] > available[j]) 
+    {
+    canBeExecuted = 0;
+    break;
+    }
+    }
+    if (canBeExecuted) 
+    {
+    finish[i] = 1;
+    for (j = 0; j < R; j++) 
+    {
+    available[j] += alloc[i][j];
+    }
+    safe = 1;
+    }
+    }
+    }
+    }
+    if (safe) 
+    {
+    printf("The system is safe.\n");
+    }
+    else 
+    {
+    printf("The system is in deadlock.\n");
+    printf("The following processes are deadlocked: ");
+    for (i = 0; i < P; i++) 
+    {
+    if (!finish[i]) 
+    {
+    printf("P%d ", i);
+    }
+    }
+    printf("\n");
+    }
+}
+int main()
+{
+    int available[R] = { 1, 2, 0 };
+    int max[P][R] = 
+    {
+        {3, 6, 8},
+        {4, 3, 3},
+        {3, 4, 4}
+    };
+    int alloc[P][R] = 
+    {
+        {3, 3, 3},
+        {2, 0, 3},
+        {1, 2, 4}
+    };
+    isDeadlock(available, max, alloc);
+    return 0;
+}
