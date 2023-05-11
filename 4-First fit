@@ -1,0 +1,30 @@
+#include <stdio.h>
+int main()
+{
+    int memory[] = {300, 600, 350, 200, 750, 125};
+    int num_processes = 5;
+    int process_sizes[] = {115, 500, 358, 200, 375};
+    int i, j;
+    int allocated[num_processes];
+    for (i = 0; i < num_processes; i++) 
+    {
+    allocated[i] = -1;
+    }
+    for (i = 0; i < num_processes; i++) 
+    {
+    for (j = 0; j < 6; j++)
+    {
+    if (memory[j] >= process_sizes[i] && allocated[i] == -1) 
+    {
+    memory[j] -= process_sizes[i];
+    allocated[i] = j;
+    printf("Process %d of size %d KB is allocated to memory partition %d of size %d KB\n",i+1,process_sizes[i], j+1, memory[j]+process_sizes[i]);
+    }
+    }
+    if (allocated[i] == -1)
+    {
+    printf("Process %d of size %d KB could not be allocated to any memory partition.\n",i+1,process_sizes[i]);
+    }
+    }
+    return 0;
+}
