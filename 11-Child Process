@@ -1,0 +1,60 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+int main() 
+{
+int pid[4];
+int i;
+for (i = 0; i < 4; i++) 
+{
+pid[i] = fork();
+if (pid[i] == 0) 
+{
+break;   // child process
+}
+}
+if (i == 0) 
+{
+printf("Odd numbers: ");
+for (int j = 1; j <= 10; j += 2) 
+{
+printf("%d ", j);
+}
+printf("\nProcess id: %d\n", getpid());
+}
+else if (i == 1) 
+{
+printf("Even numbers: ");
+for (int j = 2; j <= 10; j += 2) 
+{
+printf("%d ", j);
+}
+printf("\nProcess id: %d\n", getpid());
+}
+else if (i == 2) 
+{
+printf("Multiples of 3: ");
+for (int j = 3; j <= 30; j += 3) 
+{
+printf("%d ", j);
+}
+printf("\nProcess id: %d\n", getpid());
+}
+else if (i == 3) 
+{
+printf("Multiples of 5: ");
+for (int j = 5; j <= 50; j += 5) 
+{
+printf("%d ", j);
+}
+printf("\nProcess id: %d\n", getpid());
+}
+else 
+{
+for (int j = 0; j < 4; j++)
+{
+waitpid(pid[j], NULL, 0);
+}
+}
+return 0;
+}
