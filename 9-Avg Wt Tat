@@ -1,0 +1,43 @@
+#include <stdio.h>
+#define MAX_PROCESSES 10
+int main()
+{
+    int num_processes = 3;
+    int process_burst_times[MAX_PROCESSES] = {2, 4, 8};
+    int arrival_times[MAX_PROCESSES] = {0, 0, 0};
+    int wait_times[MAX_PROCESSES] = {0};
+    int turnaround_times[MAX_PROCESSES] = {0};
+    int completion_times[MAX_PROCESSES] = {0};
+    int total_wait_time = 0, total_turnaround_time = 0;
+    float avg_wait_time, avg_turnaround_time;
+    int i;
+    printf("First Come First Serve Scheduling Algorithm\n\n");
+    for (i = 0; i < num_processes; i++) 
+    {
+    if (i == 0) 
+    {
+    completion_times[i] = process_burst_times[i];
+    }
+    else 
+    {
+    completion_times[i] = completion_times[i-1] + process_burst_times[i];
+    }
+    }
+    for (i = 0; i < num_processes; i++) 
+    {
+    turnaround_times[i] = completion_times[i] - arrival_times[i];
+    wait_times[i] = turnaround_times[i] - process_burst_times[i];
+    total_wait_time += wait_times[i];
+    total_turnaround_time += turnaround_times[i];
+    }
+    avg_wait_time = (float)total_wait_time / num_processes;
+    avg_turnaround_time = (float)total_turnaround_time / num_processes;
+    printf("Process\tBurst Time\tArrival Time\tWait Time\tTurnaround Time\n");
+    for (i = 0; i < num_processes; i++) 
+    {
+    printf("%d\t\t%d\t\t%d\t\t%d\t\t%d\n", i, process_burst_times[i], arrival_times[i], wait_times[i], turnaround_times[i]);
+    }
+    printf("\nAverage Wait Time: %.2f\n", avg_wait_time);
+    printf("Average Turnaround Time: %.2f\n", avg_turnaround_time);
+    return 0;
+}
