@@ -1,0 +1,63 @@
+#include <stdlib.h>
+#include <pthread.h>
+#include <unistd.h>
+#define N 5
+#define THINKING 0
+#define HUNGRY 1
+#define EATING 2
+#define LEFT (i + N - 1) % N
+#define RIGHT (i + 1) % N
+int state[N];
+pthread_mutex_t mutex;
+pthread_cond_t cond[N];
+void *philosopher(void *arg) 
+{
+int i = *(int*) arg;
+while (1) 
+{
+printf("Philosopher %d is thinking\n", i);
+sleep(rand() % 5);
+printf("Philosopher %d is hungry\n", i);
+pthread_mutex_lock(&mutex);
+state[i] = HUNGRY;
+while (state[LEFT] == EATING || state[RIGHT] == EATING)
+{
+pthread_cond_wait(&cond[i], &mutex);
+}
+state[i] = EATING;
+printf("Philosopher %d is eating\n", i);
+pthread_mutex_unlock(&mutex);
+sleep(rand() % 5);
+pthread_mutex_lock(&mutex);
+state[i] = THINKING;
+ if (state[LEFT] != EATING && state[LEFT] != HUNGRY) 
+ {
+pthread_cond_signal(&cond[LEFT]);
+}
+if (state[RIGHT] != EATING && state[RIGHT] != HUNGRY)
+{
+pthread_cond_signal(&cond[RIGHT]);
+}
+pthread_mutex_unlock(&mutex);
+}
+}
+int main() 
+{
+pthread_t tid[N];
+int i;
+pthread_mutex_init(&mutex, NULL);
+for (i = 0; i < N; i++)
+{
+pthread_cond_init(&cond[i], NULL);
+state[i] = THINKING;
+}
+for (i = 0; i < N; i++) 
+{
+pthread_create(&tid[i], NULL, philosopher, &i);
+}
+for (i = 0; i < N; i++) 
+{
+pthread_join(tid[i], NULL);
+}
+return 0;
+}
