@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main() 
+{
+    int n = 5;
+    int head_pos = 50; 
+    int tracks[n]; 
+    tracks[0] = 55;
+    tracks[1] = 58;
+    tracks[2] = 60;
+    tracks[3] = 70;
+    tracks[4] = 18;
+    int direction = 1; 
+    int i, j, temp, index, total_head_mov = 0;
+    for (i = 0; i < n; i++) 
+    {
+    if (head_pos <= tracks[i])
+    {
+    index = i;
+    break;
+    }
+    }
+    for (i = index; i < n; i++) 
+    {
+    printf("%d ", tracks[i]);
+    total_head_mov += abs(head_pos - tracks[i]);
+    head_pos = tracks[i];
+    }
+    direction = -1;
+    for (i = index-1; i >= 0; i--) 
+    {
+    printf("%d ", tracks[i]);
+    total_head_mov += abs(head_pos - tracks[i]);
+    head_pos = tracks[i];
+    }
+    printf("\nAverage head movement: %.2f\n", (float)total_head_mov/n);
+    return 0;
+}
