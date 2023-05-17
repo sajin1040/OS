@@ -1,14 +1,15 @@
 #include <stdio.h>
-#define MAX_MEMORY_SIZE 1000
+#define MAX_MEMORY_SIZE 1000 
 #define MAX_PROCESS_SIZE 50 
-#define FREE 0
+#define FREE 0 
 #define OCCUPIED 1
-int memory[MAX_MEMORY_SIZE];
-int process[MAX_PROCESS_SIZE]; 
-int process_count = 0; 
+int memory[MAX_MEMORY_SIZE]; 
+int process[MAX_PROCESS_SIZE];
+int process_count = 0;
+
 void initialize_memory() 
 {
-    for (int i = 0; i < MAX_MEMORY_SIZE; i++)
+    for (int i = 0; i < MAX_MEMORY_SIZE; i++) 
     {
         memory[i] = FREE;
     }
@@ -16,15 +17,15 @@ void initialize_memory()
 void print_memory() 
 {
     printf("Memory Status: ");
-    for (int i = 0; i < MAX_MEMORY_SIZE; i++)
+    for (int i = 0; i < MAX_MEMORY_SIZE; i++) 
     {
         printf("%d ", memory[i]);
     }
     printf("\n");
 }
-void add_process_first_fit(int size) 
+void add_process_first_fit(int size)
 {
-    for (int i = 0; i < MAX_MEMORY_SIZE; i++)
+    for (int i = 0; i < MAX_MEMORY_SIZE; i++) 
     {
         int j = 0;
         while (memory[i+j] == FREE && j < size) 
@@ -33,7 +34,7 @@ void add_process_first_fit(int size)
         }
         if (j == size) 
         {
-            for (int k = 0; k < size; k++) 
+            for (int k = 0; k < size; k++)
             {
                 memory[i+k] = OCCUPIED;
             }
