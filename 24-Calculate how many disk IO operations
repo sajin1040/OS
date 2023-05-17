@@ -1,0 +1,58 @@
+#include <stdio.h>
+#define BLOCK_SIZE 8192
+#define BLOCKS_IN_FILE 100
+int contiguous_allocation(int block_num)
+{
+int start_block = 0;
+int end_block = block_num - 1;
+int num_io_ops = 0;
+if (end_block < BLOCKS_IN_FILE) 
+{
+num_io_ops = 1;
+} 
+else 
+{
+num_io_ops = 2;
+}
+return num_io_ops;
+}
+int linked_allocation(int block_num)
+{
+int num_io_ops = 1; 
+int curr_block = 0;
+while (curr_block != block_num) 
+{
+num_io_ops++;
+curr_block++;
+}
+ return num_io_ops;
+}
+int indexed_allocation(int block_num)
+{
+int index_block_num = BLOCKS_IN_FILE / (BLOCK_SIZE / sizeof(int));
+if (BLOCKS_IN_FILE % (BLOCK_SIZE / sizeof(int)) != 0) {
+        index_block_num++;
+}
+int num_io_ops = 1;
+if (block_num < index_block_num) 
+{
+num_io_ops++;
+} else 
+{
+num_io_ops += 2; 
+}
+    return num_io_ops;
+}
+int main(void)
+{
+int block_num;
+printf("Enter the block number to be added (0-99): ");
+scanf("%d", &block_num);
+int contiguous_io_ops = contiguous_allocation(block_num);
+int linked_io_ops = linked_allocation(block_num);
+int indexed_io_ops = indexed_allocation(block_num);
+printf("For contiguous allocation strategy: %d disk I/O operations required.\n", contiguous_io_ops);
+printf("For linked allocation strategy: %d disk I/O operations required.\n", linked_io_ops);
+printf("For indexed (single-level) allocation strategy: %d disk I/O operations required.\n", indexed_io_ops);
+    return 0;
+}
